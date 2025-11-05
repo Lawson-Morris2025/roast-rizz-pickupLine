@@ -3,175 +3,183 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🔥 Roast Bot</title>
+<title>🔥 Ultimate Roast Bot</title>
 <style>
 body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #0b0c10, #1f2833, #c5c6c7);
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #0b0c10, #1f2833, #c5c6c7);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
 }
 .container {
-    text-align: center;
-    background: rgba(0,0,0,0.75);
-    padding: 2rem;
-    border-radius: 20px;
-    max-width: 450px;
-    width: 90%;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+  text-align: center;
+  background: rgba(0,0,0,0.75);
+  padding: 2rem;
+  border-radius: 20px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.7);
 }
 h1 {
-    margin-bottom: 1rem;
-    font-size: 2rem;
-    color: #ff3c3c;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  color: #ff3c3c;
 }
 input, button {
-    margin-top: 0.8rem;
-    padding: 0.7rem 1rem;
-    font-size: 1rem;
-    border-radius: 10px;
-    border: none;
-    width: 80%;
+  margin-top: 0.8rem;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: none;
+  width: 80%;
 }
 button {
-    margin-top: 1rem;
-    background: #ff3c3c;
-    color: #fff;
-    cursor: pointer;
+  margin-top: 1rem;
+  background: #ff3c3c;
+  color: #fff;
+  cursor: pointer;
 }
 button:hover {
-    background: #ff5959;
+  background: #ff5959;
 }
 p#roastDisplay {
-    margin-top: 1.5rem;
-    font-size: 1.3rem;
-    min-height: 3em;
-    padding: 1rem;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.1);
-    transition: all 0.3s ease;
+  margin-top: 1.5rem;
+  font-size: 1.3rem;
+  min-height: 3em;
+  padding: 1rem;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.1);
+  transition: all 0.3s ease;
 }
 button#copyBtn {
-    background: #3cff3c;
-    margin-top: 0.5rem;
+  background: #3cff3c;
+  margin-top: 0.5rem;
 }
 button#copyBtn:hover {
-    background: #59ff59;
+  background: #59ff59;
 }
 </style>
 </head>
 <body>
 <div class="container">
-    <h1>🔥 Roast Bot 🔥</h1>
-    <input type="text" id="enemyInput" placeholder="What did they say?" />
-    <button id="generateBtn">Generate Roast</button>
-    <p id="roastDisplay">Your savage comeback will appear here!</p>
-    <button id="copyBtn">Copy</button>
+  <h1>🔥 Ultimate Roast Bot 🔥</h1>
+  <input type="text" id="enemyInput" placeholder="What did they say?" />
+  <button id="generateBtn">Generate Roast</button>
+  <p id="roastDisplay">Your savage comeback will appear here!</p>
+  <button id="copyBtn">Copy</button>
 </div>
 
 <script>
-// Array of harsh yet funny comebacks
-const comebacks = [
-"Wow… did you rehearse that, or did it just hurt to speak?",
-"Is that all you got? My grandma insults better.",
-"Congratulations! You’ve just made me laugh… at you.",
-"You're like a cloud. When you disappear, it's a beautiful day.",
-"I’d agree with you, but then we’d both be wrong.",
-"Some drink from the fountain of knowledge; you only gargled.",
-"If I wanted a comeback from someone useless, I’d call you.",
-"You have something on your face… oh wait, it’s just arrogance.",
-"You bring joy… when you leave the room.",
-"You're as sharp as a marble, and twice as pointless.",
-"You're proof that even mistakes can reproduce themselves.",
-"You're the human version of a typo.",
-"Your family tree must be a cactus because everyone on it is a prick.",
-"You're like a Wi-Fi with 1% signal: barely useful.",
-"You're the reason we have instructions on shampoo.",
-"You're like decaf coffee: disappointing.",
-"You're about as necessary as a screen door on a submarine.",
-"You're like a sandwich with no filling… bland and sad.",
-"If brains were dynamite, you wouldn’t have enough to blow your hat off.",
-"You're like a shadow, but even less helpful.",
-"You're like a broken pencil… completely pointless.",
-"You're like a cloud blocking the sun… depressing.",
-"You're like rain on a parade… nobody asked for it.",
-"You're like spaghetti without sauce… bland and sad.",
-"You're like a song stuck on repeat… annoying.",
-"You're like a chair with three legs… unstable and weak.",
-"You're like a fire alarm that never goes off… pointless.",
-"You're like a cookie with no chocolate… disappointing.",
-"You're like a mirror that never reflects truth… fake.",
-"You're like a car without an engine… going nowhere.",
-"You're like socks with holes… everywhere.",
-"If ignorance is bliss, you must be ecstatic.",
-"You're like a broken app… crashes all the time.",
-"You're like a door that won't open… stuck in life.",
-"You're like a candle without wax… useless.",
-"You're like a ship without a sail… going nowhere slowly.",
-"You're like toast burnt on both sides… bitter.",
-"You're like a cloud without a silver lining… sad.",
-"You're like a pillow full of rocks… uncomfortable for everyone.",
-"You're like a keyboard missing keys… frustrating.",
-"You're like a story with missing pages… confusing and incomplete.",
-"You're like a mirror that lies to everyone… fake.",
-"You're like a clock that runs backwards… confusing.",
-"You're like a fire that never starts… pointless.",
-"You're like a plant that refuses to grow… stagnant.",
-"You're like a phone with no signal… ignored by everyone.",
-"You're like a light switch that does nothing… useless.",
-"You're like a Wi-Fi that always drops… unreliable.",
-"You're like decaf tea… nobody asked for you.",
-"You're like a cloud that never moves… boring.",
-"You're like a song that skips… irritating.",
-"You're like a sponge with holes… absorbs nothing.",
-"You're like a beach without sand… incomplete."
+// Harsh context-aware roasts categorized
+const roastPatterns = [
+  { keywords: ["stupid","dumb","idiot","fool","moron","asshole","bitch","dick","shit"], responses: [
+    "Calling you stupid would be an insult to stupidity itself.",
+    "You're proof that evolution can fail spectacularly.",
+    "Even trash has standards, and you failed them."
+  ]},
+  { keywords: ["ugly","face","look","fat","skinny","hair","nose","mouth"], responses: [
+    "Your face could scare a mirror into breaking.",
+    "You're like a cloud: ugly, pointless, and blocking everything good.",
+    "Even Photoshop refuses to touch you."
+  ]},
+  { keywords: ["rich","money","cash","bank","gold","expensive"], responses: [
+    "Money can't buy class, luckily for everyone around you.",
+    "You're proof wealth can't fix stupidity.",
+    "Even your bank account cries silently for help."
+  ]},
+  { keywords: ["smart","brain","clever","intelligent","genius"], responses: [
+    "If brains were dynamite, you couldn't blow your hat off.",
+    "Your 'cleverness' is a public hazard.",
+    "Being smart doesn't mean being tolerable."
+  ]},
+  { keywords: ["funny","joke","laugh","humor"], responses: [
+    "Your jokes are dangerous… they could injure innocent bystanders.",
+    "You're like a clown without a circus: sad and terrifying.",
+    "Silence is golden, but with you, silence is a mercy."
+  ]},
+  { keywords: ["strong","muscle","fit","gym","body"], responses: [
+    "All that muscle, still no spine to hold your dignity.",
+    "Strength isn't everything… clearly you missed the memo.",
+    "You have the body of a champion… in losing."
+  ]},
+  { keywords: ["love","date","girl","boy","crush"], responses: [
+    "Even love feels pity for you.",
+    "You're like a fire alarm on a date: loud, annoying, and irrelevant.",
+    "Cupid refuses to work on your hopeless case."
+  ]},
+  { keywords: ["hate","kill","stupid","annoying"], responses: [
+    "Even your threats are sad.",
+    "You can't offend a rock… but I can roast you like one.",
+    "You're like a mosquito with stage fright: useless."
+  ]}
 ];
 
-// Track used comebacks to avoid repeats
-let used = [];
+// Generic fallback harsh roasts
+const genericRoasts = [
+  "You're like a Wi-Fi with 1% signal: invisible and annoying.",
+  "You bring joy… when you leave the room.",
+  "You're the human equivalent of a participation trophy.",
+  "You're as sharp as a marble, and half as useful.",
+  "Some drink from the fountain of knowledge; you only gargled.",
+  "You're like a cloud blocking the sun… depressing and unwanted.",
+  "You're a few fries short of a Happy Meal… and the rest are spoiled.",
+  "You're the human equivalent of a typo that never gets fixed.",
+  "You're like toast burnt on both sides… bitter, useless, and sad.",
+  "You're like socks with holes… exposed and ridiculous."
+];
 
-// Generate a roast based on input
+// Track used roasts
+let usedRoasts = [];
+
+// Function to generate context-aware roast
 function generateRoast() {
-    const input = document.getElementById('enemyInput').value.trim();
-    if(!input) {
-        alert("Please type what they said!");
-        return;
+  const input = document.getElementById('enemyInput').value.trim().toLowerCase();
+  if(!input) { alert("Please type what they said!"); return; }
+
+  // Detect if any keyword matches, including swear words
+  let matchingResponses = [];
+  roastPatterns.forEach(p => {
+    if(p.keywords.some(k => input.includes(k))) {
+      matchingResponses.push(...p.responses);
     }
-    if(used.length === comebacks.length) used = [];
-    const unused = comebacks.filter(c => !used.includes(c));
-    const choice = unused[Math.floor(Math.random() * unused.length)];
-    used.push(choice);
-    const display = document.getElementById('roastDisplay');
-    display.style.opacity = 0;
-    setTimeout(() => {
-        display.textContent = `"${input}"? ${choice}`;
-        display.style.opacity = 1;
-    }, 200);
+  });
+
+  // Use fallback if nothing matches
+  const pool = matchingResponses.length ? matchingResponses : genericRoasts;
+  const unused = pool.filter(r => !usedRoasts.includes(r));
+  if(unused.length === 0) usedRoasts = [], unused.push(...pool);
+  const roast = unused[Math.floor(Math.random() * unused.length)];
+  usedRoasts.push(roast);
+
+  // Animate display
+  const display = document.getElementById('roastDisplay');
+  display.style.opacity = 0;
+  setTimeout(() => {
+    display.textContent = `"${input}"? ${roast}`;
+    display.style.opacity = 1;
+  }, 200);
 }
 
 // Event listeners
 document.getElementById('generateBtn').addEventListener('click', generateRoast);
 document.getElementById('copyBtn').addEventListener('click', () => {
-    const text = document.getElementById('roastDisplay').textContent;
-    if(text) {
-        navigator.clipboard.writeText(text);
-        alert("Copied!");
-    }
+  const text = document.getElementById('roastDisplay').textContent;
+  if(text) navigator.clipboard.writeText(text) && alert("Copied!");
 });
 
-// Inline service worker for offline PWA
-if('serviceWorker' in navigator) {
-    const swBlob = new Blob([`
-        const CACHE_NAME = 'roast-bot-cache-v1';
-        const urlsToCache = ['.'];
-        self.addEventListener('install', e => e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(urlsToCache))));
-        self.addEventListener('fetch', e => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))));
-    `], { type: 'application/javascript' });
-    navigator.serviceWorker.register(URL.createObjectURL(swBlob));
+// Inline service worker for PWA offline support
+if('serviceWorker' in navigator){
+  const swBlob = new Blob([`
+    const CACHE_NAME='ultimate-roast-bot-cache';
+    const urlsToCache=['.'];
+    self.addEventListener('install', e=>e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(urlsToCache))));
+    self.addEventListener('fetch', e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
+  `],{type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(swBlob));
 }
 </script>
 </body>
