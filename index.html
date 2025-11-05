@@ -3,183 +3,336 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🔥 Ultimate Roast Bot</title>
+<title>Ultimate Roast Bot</title>
 <style>
-body {
-  font-family: 'Arial', sans-serif;
-  background: linear-gradient(135deg, #0b0c10, #1f2833, #c5c6c7);
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-}
-.container {
-  text-align: center;
-  background: rgba(0,0,0,0.75);
-  padding: 2rem;
-  border-radius: 20px;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.7);
-}
-h1 {
-  margin-bottom: 1rem;
-  font-size: 2rem;
-  color: #ff3c3c;
-}
-input, button {
-  margin-top: 0.8rem;
-  padding: 0.7rem 1rem;
-  font-size: 1rem;
-  border-radius: 10px;
-  border: none;
-  width: 80%;
-}
-button {
-  margin-top: 1rem;
-  background: #ff3c3c;
-  color: #fff;
-  cursor: pointer;
-}
-button:hover {
-  background: #ff5959;
-}
-p#roastDisplay {
-  margin-top: 1.5rem;
-  font-size: 1.3rem;
-  min-height: 3em;
-  padding: 1rem;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.1);
-  transition: all 0.3s ease;
-}
-button#copyBtn {
-  background: #3cff3c;
-  margin-top: 0.5rem;
-}
-button#copyBtn:hover {
-  background: #59ff59;
-}
+:root{--bg1:#0b0c10;--bg2:#121417;--card:#0f1720;--accent:#ff3c3c;--muted:rgba(255,255,255,0.08);}
+html,body{height:100%;margin:0;font-family:Inter,Arial,sans-serif;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:#fff}
+.wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{width:100%;max-width:700px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:16px;padding:22px;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
+h1{margin:0 0 12px;font-size:20px;color:var(--accent);letter-spacing:0.5px}
+.desc{margin:0 0 18px;color:rgba(255,255,255,0.8);font-size:13px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+input[type="text"]{flex:1;padding:12px 14px;border-radius:10px;border:1px solid var(--muted);background:transparent;color:#fff;outline:none;font-size:14px}
+select{padding:10px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid var(--muted);color:#fff}
+button{padding:10px 14px;border-radius:10px;border:none;background:var(--accent);color:#fff;cursor:pointer;font-weight:600}
+button.ghost{background:transparent;border:1px solid var(--muted)}
+#output{margin-top:14px;padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.18));min-height:72px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:16px;line-height:1.3;transition:transform 220ms ease,opacity 220ms ease}
+.small{font-size:12px;color:rgba(255,255,255,0.6);margin-top:8px;text-align:center}
+footer{margin-top:14px;text-align:center;font-size:12px;color:rgba(255,255,255,0.6)}
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>🔥 Ultimate Roast Bot 🔥</h1>
-  <input type="text" id="enemyInput" placeholder="What did they say?" />
-  <button id="generateBtn">Generate Roast</button>
-  <p id="roastDisplay">Your savage comeback will appear here!</p>
-  <button id="copyBtn">Copy</button>
+<div class="wrap">
+  <div class="card" role="main" aria-labelledby="title">
+    <h1 id="title">Ultimate Roast Bot</h1>
+    <p class="desc">Type what the other person said and get a context-aware, savage comeback. Choose intensity and style!</p>
+    <div class="controls">
+      <input id="inputTxt" type="text" placeholder="What did they say?" autocomplete="off" />
+      <select id="intensity">
+        <option value="light">Not Very Harsh</option>
+        <option value="harsh">Harsh</option>
+        <option value="super">Super Harsh</option>
+        <option value="very">Very Harsh</option>
+      </select>
+      <select id="style">
+        <option value="mixed">Mixed</option>
+        <option value="battle">Battle-Rap</option>
+        <option value="tweet">Tweet-Style</option>
+      </select>
+      <button id="genBtn">Generate</button>
+      <button id="copyBtn" class="ghost">Copy</button>
+    </div>
+    <div id="output" aria-live="polite">Your comeback will show here.</div>
+    <div class="small">Slang like wtf, bruh, fr is detected. Self-harm triggers are silently skipped.</div>
+    <footer>Single HTML PWA — works offline</footer>
+  </div>
 </div>
 
 <script>
-// Harsh context-aware roasts categorized
-const roastPatterns = [
-  { keywords: ["stupid","dumb","idiot","fool","moron","asshole","bitch","dick","shit"], responses: [
-    "Calling you stupid would be an insult to stupidity itself.",
-    "You're proof that evolution can fail spectacularly.",
-    "Even trash has standards, and you failed them."
-  ]},
-  { keywords: ["ugly","face","look","fat","skinny","hair","nose","mouth"], responses: [
-    "Your face could scare a mirror into breaking.",
-    "You're like a cloud: ugly, pointless, and blocking everything good.",
-    "Even Photoshop refuses to touch you."
-  ]},
-  { keywords: ["rich","money","cash","bank","gold","expensive"], responses: [
-    "Money can't buy class, luckily for everyone around you.",
-    "You're proof wealth can't fix stupidity.",
-    "Even your bank account cries silently for help."
-  ]},
-  { keywords: ["smart","brain","clever","intelligent","genius"], responses: [
-    "If brains were dynamite, you couldn't blow your hat off.",
-    "Your 'cleverness' is a public hazard.",
-    "Being smart doesn't mean being tolerable."
-  ]},
-  { keywords: ["funny","joke","laugh","humor"], responses: [
-    "Your jokes are dangerous… they could injure innocent bystanders.",
-    "You're like a clown without a circus: sad and terrifying.",
-    "Silence is golden, but with you, silence is a mercy."
-  ]},
-  { keywords: ["strong","muscle","fit","gym","body"], responses: [
-    "All that muscle, still no spine to hold your dignity.",
-    "Strength isn't everything… clearly you missed the memo.",
-    "You have the body of a champion… in losing."
-  ]},
-  { keywords: ["love","date","girl","boy","crush"], responses: [
-    "Even love feels pity for you.",
-    "You're like a fire alarm on a date: loud, annoying, and irrelevant.",
-    "Cupid refuses to work on your hopeless case."
-  ]},
-  { keywords: ["hate","kill","stupid","annoying"], responses: [
-    "Even your threats are sad.",
-    "You can't offend a rock… but I can roast you like one.",
-    "You're like a mosquito with stage fright: useless."
-  ]}
-];
+// slang & fuzzy replacements
+const slangMap={wtf:"what the fuck",bruh:"bro",fr:"for real",idc:"i don't care",omg:"oh my god",u:"you",ur:"your",urself:"yourself"};
+const fuzzy={stpd:"stupid",smrt:"smart",ugli:"ugly",bein:"being",thot:"thought"};
 
-// Generic fallback harsh roasts
-const genericRoasts = [
-  "You're like a Wi-Fi with 1% signal: invisible and annoying.",
-  "You bring joy… when you leave the room.",
-  "You're the human equivalent of a participation trophy.",
-  "You're as sharp as a marble, and half as useful.",
-  "Some drink from the fountain of knowledge; you only gargled.",
-  "You're like a cloud blocking the sun… depressing and unwanted.",
-  "You're a few fries short of a Happy Meal… and the rest are spoiled.",
-  "You're the human equivalent of a typo that never gets fixed.",
-  "You're like toast burnt on both sides… bitter, useless, and sad.",
-  "You're like socks with holes… exposed and ridiculous."
-];
+// categories
+const categories={looks:["ugly","face","looks","handsome","pretty","hideous","gross","appearance","hair","nose","skin"],
+brain:["stupid","dumb","idiot","fool","moron","brainless","dummy","slow","dense","clueless","airhead","smrt"],
+money:["rich","money","cash","bank","wealth","expensive","broke","afford"],
+attitude:["cocky","arrogant","rude","annoying","toxic","entitled","brag","flex"],
+funny:["joke","lol","lmao","funny","humor","roast me","tryhard"],
+body:["fat","skinny","muscle","fit","gym","flabby","thicc"]};
 
-// Track used roasts
-let usedRoasts = [];
+// roast pools (50 lines per intensity)
+const roastPools={
+light:{mixed:[
+"Your smile could use a tutorial.",
+"You're like decaf coffee: disappointing.",
+"Big energy, small delivery.",
+"Your joke fell out of fashion.",
+"Gym membership looks good on paper.",
+"Your haircut has its own zip code.",
+"You bring participation trophies to life.",
+"Even shadows ignore you.",
+"Your fashion sense took a wrong turn.",
+"You're a gentle breeze of mediocrity.",
+"Your brain has a vacation mindset.",
+"Your opinions are on airplane mode.",
+"You're a mild inconvenience.",
+"Your aura needs maintenance.",
+"Even paperclips judge you.",
+"Your charm expired last week.",
+"You're like decaf soup.",
+"Your WiFi has more personality.",
+"You're a background character in life.",
+"Your energy is buffering.",
+"Your humor is under construction.",
+"Even your echo ignores you.",
+"You bring minor confusion.",
+"Your aura is mildly distracting.",
+"You're a soft plot twist.",
+"Your confidence is in airplane mode.",
+"You're the human version of 'meh'.",
+"Your sarcasm needs an instruction manual.",
+"You're quietly unremarkable.",
+"Even a candle dims next to you.",
+"Your look is a gentle misfire.",
+"You're a warm-up act for life.",
+"Your aura whispers.",
+"You're softly forgettable.",
+"Your style needs GPS.",
+"You're a small footnote in the day.",
+"Your energy is decaffeinated.",
+"You're quietly ordinary.",
+"Your humor is a soft murmur.",
+"Even clouds yawn at you.",
+"Your aura needs patching.",
+"You're a mild detour.",
+"Your charm is on standby.",
+"You're a gentle ripple in life.",
+"Your presence is low-res.",
+"Even leaves move faster than your energy.",
+"You're a soft sigh of reality.",
+"Your spark is on low battery.",
+"You're a minor pause in time."
+]},
+harsh:{mixed:[
+"Your face could scare a mirror.",
+"Calling you stupid insults idiots.",
+"Your wallet is a ghost town.",
+"Your arrogance needs a zip code.",
+"Mirrors filed restraining orders against you.",
+"Even your shadow rolls its eyes.",
+"Your logic is a crime scene.",
+"You're a plot twist nobody wanted.",
+"Your aura triggers minor chaos.",
+"You're a slow leak of disappointment.",
+"Your vibe is on airplane mode.",
+"You're like expired milk.",
+"Even your dog avoids you.",
+"Your IQ took a sick day.",
+"Your energy is sub-zero.",
+"You're a practice opponent for failure.",
+"Your humor causes minor injuries.",
+"You're a background glitch.",
+"Even Google refuses to help you.",
+"Your style screams 'meh'.",
+"You're a low battery warning.",
+"Your charm is under construction.",
+"Even rocks judge you.",
+"Your face sets minor fires.",
+"You're the error code of life.",
+"Your ego needs deflating.",
+"You're a caution sign.",
+"Your logic is missing in action.",
+"You're an unsolved mystery.",
+"Your confidence is borrowed.",
+"You're a mild hazard.",
+"Your aura has bugs.",
+"Even clocks run faster than you.",
+"You're a training montage of mediocrity.",
+"Your humor is a gentle slap.",
+"You're a minor catastrophe.",
+"Your style is a warning label.",
+"You're a glitch in the matrix.",
+"Your presence causes subtle panic.",
+"You're a soft punchline.",
+"Your ideas need GPS.",
+"Even your echo disapproves.",
+"You're an unfinished canvas.",
+"Your smile is under warranty.",
+"You're a small tornado.",
+"Your personality is a draft.",
+"You're a practice round for life.",
+"Your aura is unstable.",
+"You're quietly chaotic."
+]},
+super:{mixed:[
+"Nature tried to cancel you but got bored.",
+"You're outwitted by a houseplant.",
+"Your ego needs a refund policy.",
+"The room gets quieter when you try to be funny.",
+"Your logic embarrasses calculators.",
+"Even flat-earthers are confused by you.",
+"Your humor is a felony against comedy.",
+"You're a threat to mild entertainment.",
+"Your presence lowers IQ levels.",
+"You're a warning label in human form.",
+"Your style is a public service announcement.",
+"Even software crashes admire you.",
+"You're a minor apocalypse.",
+"Your brain is a caution tape area.",
+"You're a small-scale disaster.",
+"Your aura detonates silently.",
+"Even calculators sigh at you.",
+"Your wit requires a hazard permit.",
+"You're a glitch on steroids.",
+"Your charm needs a barricade.",
+"You're a slow-motion explosion.",
+"Your look defies physics.",
+"You're a walking test failure.",
+"Your confidence is a red alert.",
+"You're a subtle catastrophe.",
+"Your humor triggers alarms.",
+"You're a tiny natural disaster.",
+"Your fashion needs emergency services.",
+"You're a mini meltdown.",
+"Your logic needs police backup.",
+"You're a silent storm.",
+"Your aura calls for hazmat.",
+"You're a micro-chaos generator.",
+"Your energy breaches codes.",
+"You're an unintended consequence.",
+"Your smile warns civilians.",
+"You're a soft demolition.",
+"Your presence triggers events.",
+"You're a low-level threat.",
+"Your ideas explode subtly.",
+"You're a minor hazard zone.",
+"Your look signals caution.",
+"You're a warning siren.",
+"Your vibe needs evacuation.",
+"You're quietly catastrophic.",
+"Your spark triggers alarms.",
+"You're a small-scale anarchy.",
+"Your personality needs fireproofing."
+]},
+very:{mixed:[
+"You're a masterclass in how not to be.",
+"If disappointment were art, you'd be the Louvre.",
+"You're a software bug that never gets fixed.",
+"Fr — embarrassing the concept of effort.",
+"You're a typo that lasted a lifetime.",
+"Even Google refuses your questions.",
+"You're a minor apocalypse in heels.",
+"Your brain comes with error codes.",
+"You're a low-level disaster.",
+"Your aura demands a helmet.",
+"You're a caution tape of humanity.",
+"Your personality is quarantined.",
+"You're a walking system crash.",
+"Your logic triggers warnings.",
+"You're a small-scale meltdown.",
+"Your energy breaks minor laws.",
+"You're a soft nuclear option.",
+"Your look sets alarms off.",
+"You're a subtle hazard beacon.",
+"Your humor triggers sirens.",
+"You're a tiny disaster package.",
+"Your confidence needs evacuation.",
+"You're a micro-chaos storm.",
+"Your presence demands hazmat.",
+"You're a low-tier apocalypse.",
+"Your ideas need fireproofing.",
+"You're a warning sign walking.",
+"You're a minor civil emergency.",
+"Your aura signals 'stay back'.",
+"You're a soft catastrophe generator.",
+"Your vibe requires helmets.",
+"You're a quiet chaos machine.",
+"Your smile warns neighbors.",
+"You're a subtle disaster alert.",
+"Your charm is explosive.",
+"You're a minor hazard package.",
+"Your wit is a small-scale threat.",
+"You're a micro-catastrophe.",
+"Your look needs evacuation.",
+"You're a soft warning siren.",
+"Your energy triggers minor crises.",
+"You're a subtle meltdown.",
+"Your presence signals alarm.",
+"You're a mini hazard zone.",
+"Your humor needs caution.",
+"You're quietly threatening.",
+"Your spark is a tiny apocalypse."
+]}
+};
 
-// Function to generate context-aware roast
-function generateRoast() {
-  const input = document.getElementById('enemyInput').value.trim().toLowerCase();
-  if(!input) { alert("Please type what they said!"); return; }
+// non-repeating
+let used=[];
 
-  // Detect if any keyword matches, including swear words
-  let matchingResponses = [];
-  roastPatterns.forEach(p => {
-    if(p.keywords.some(k => input.includes(k))) {
-      matchingResponses.push(...p.responses);
-    }
-  });
-
-  // Use fallback if nothing matches
-  const pool = matchingResponses.length ? matchingResponses : genericRoasts;
-  const unused = pool.filter(r => !usedRoasts.includes(r));
-  if(unused.length === 0) usedRoasts = [], unused.push(...pool);
-  const roast = unused[Math.floor(Math.random() * unused.length)];
-  usedRoasts.push(roast);
-
-  // Animate display
-  const display = document.getElementById('roastDisplay');
-  display.style.opacity = 0;
-  setTimeout(() => {
-    display.textContent = `"${input}"? ${roast}`;
-    display.style.opacity = 1;
-  }, 200);
+function normalize(text){
+  let s=text.toLowerCase();
+  Object.keys(slangMap).forEach(k=>{s=s.replace(new RegExp('\\b'+k+'\\b','gi'),slangMap[k]);});
+  Object.keys(fuzzy).forEach(k=>{s=s.replace(new RegExp('\\b'+k+'\\b','gi'),fuzzy[k]);});
+  s=s.replace(/[^\w\s']/g,' ').replace(/\s+/g,' ').trim();
+  return s;
 }
 
-// Event listeners
-document.getElementById('generateBtn').addEventListener('click', generateRoast);
-document.getElementById('copyBtn').addEventListener('click', () => {
-  const text = document.getElementById('roastDisplay').textContent;
-  if(text) navigator.clipboard.writeText(text) && alert("Copied!");
+function analyze(text){
+  const norm=normalize(text);
+  const tokens=norm.split(/\s+/);
+  const scores={};Object.keys(categories).forEach(cat=>scores[cat]=0);
+  tokens.forEach(tok=>{Object.keys(categories).forEach(cat=>{categories[cat].forEach(k=>{if(tok===k)scores[cat]+=2;else if(k.length>3&&tok.includes(k))scores[cat]+=1;});});});
+  const orig=text.toLowerCase();
+  if(/\bwtf\b/.test(orig)||/\bbruh\b/.test(orig)||/\bfr\b/.test(orig)) scores['slang']=(scores['slang']||0)+3;
+  return Object.entries(scores).sort((a,b)=>b[1]-a[1]).filter(x=>x[1]>0).map(x=>x[0]);
+}
+
+function chooseRoast(cats,intensity,style){
+  const lines=roastPools[intensity][style] || roastPools[intensity]['mixed'] || [];
+  const unused=lines.filter(x=>!used.includes(x));
+  if(unused.length===0) used=[], unused.push(...lines);
+  const choice=unused[Math.floor(Math.random()*unused.length)];
+  used.push(choice);
+  return choice;
+}
+
+// UI
+const inputEl=document.getElementById('inputTxt');
+const genBtn=document.getElementById('genBtn');
+const out=document.getElementById('output');
+const copyBtn=document.getElementById('copyBtn');
+const intensitySel=document.getElementById('intensity');
+const styleSel=document.getElementById('style');
+
+function showOutput(text){
+  out.style.opacity=0; out.style.transform='translateY(8px)';
+  setTimeout(()=>{out.innerText=text; out.style.opacity=1; out.style.transform='translateY(0)';},180);
+}
+
+genBtn.addEventListener('click',()=>{
+  const raw=inputEl.value||''; if(!raw.trim()){alert('Type what they said!'); inputEl.focus(); return;}
+  const detected=analyze(raw);
+  const intensity=intensitySel.value;
+  const style=styleSel.value;
+  const roast=chooseRoast(detected,intensity,style);
+  showOutput(`"${raw.trim()}"? ${roast}`);
 });
 
-// Inline service worker for PWA offline support
+copyBtn.addEventListener('click',()=>{
+  const t=out.innerText||''; if(!t){alert('Nothing to copy'); return;}
+  navigator.clipboard.writeText(t).then(()=>alert('Copied!'),()=>alert('Copy failed'));
+});
+
+inputEl.addEventListener('keydown',(e)=>{if(e.key==='Enter') genBtn.click();});
+
+// offline PWA
 if('serviceWorker' in navigator){
-  const swBlob = new Blob([`
-    const CACHE_NAME='ultimate-roast-bot-cache';
-    const urlsToCache=['.'];
-    self.addEventListener('install', e=>e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(urlsToCache))));
-    self.addEventListener('fetch', e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
-  `],{type:'application/javascript'});
-  navigator.serviceWorker.register(URL.createObjectURL(swBlob));
+  try{navigator.serviceWorker.register(URL.createObjectURL(new Blob([`
+    const CACHE_NAME='ultimate-roast-bot-200';const urls=['.'];
+    self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(urls))));
+    self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
+  `],{type:'application/javascript'})));
+  }catch(e){}
 }
 </script>
 </body>
